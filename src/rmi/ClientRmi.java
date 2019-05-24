@@ -18,11 +18,11 @@ import javax.swing.JOptionPane;
  */
 public class ClientRmi extends javax.swing.JFrame {
 
-     IOperacionesMath servidorRmi;
-    
+    IOperacionesMath servidorRmi;
+
     public ClientRmi() {
-           String direccionServer = "localhost";
-        int puertoServer = 5000;
+        String direccionServer = "localhost";
+        int puertoServer = 5001;
         try {
 
             Registry registro = LocateRegistry.getRegistry(direccionServer, puertoServer);
@@ -46,19 +46,33 @@ public class ClientRmi extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Cuentas");
+        setTitle("Banco");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Menu de opciones"));
+        jPanel1.setLayout(new java.awt.GridLayout(6, 1, 0, 6));
 
-        jButton1.setText("Añadir Cuenta");
+        jButton1.setText("Añadir cuenta");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+        jPanel1.add(jButton1);
+
+        jButton3.setText("Modificar cuenta");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton3);
 
         jButton2.setText("Eliminar cuenta");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -66,43 +80,42 @@ public class ClientRmi extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        jPanel1.add(jButton2);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(352, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addContainerGap(191, Short.MAX_VALUE))
-        );
+        jButton4.setText("Agregar saldo");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton4);
+
+        jButton5.setText("Retirar saldo");
+        jPanel1.add(jButton5);
+
+        jButton6.setText("Consultar saldo");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton6);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(42, 42, 42)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
@@ -111,8 +124,8 @@ public class ClientRmi extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             int numero_cuenta = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de cuenta"));
-            String propietario = JOptionPane.showInputDialog(rootPane,"Ingrese propietario");
-            int saldo = Integer.parseInt(JOptionPane.showInputDialog(rootPane,"Ingrese el saldo"));
+            String propietario = JOptionPane.showInputDialog(rootPane, "Ingrese propietario");
+            int saldo = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese el saldo"));
             int resultado = servidorRmi.insertarCuenta(numero_cuenta, propietario, saldo);
             JOptionPane.showMessageDialog(null, resultado + "");
         } catch (RemoteException ex) {
@@ -122,15 +135,54 @@ public class ClientRmi extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-           try {
-            int numero_cuenta = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de cuenta"));
+        try {
+            int numero_cuenta = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese el numero de cuenta"));
             int resultado = servidorRmi.eliminarCuenta(numero_cuenta);
             JOptionPane.showMessageDialog(null, resultado + "");
         } catch (RemoteException ex) {
             System.out.println("Error en ingreso " + ex);
         }
-    
+
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            int numero_cuenta = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese el numero de cuenta"));
+            String propietario = JOptionPane.showInputDialog(rootPane, "Ingrese el nuevo propietario");
+            int resultado = servidorRmi.modificarCuenta(numero_cuenta, propietario);
+            JOptionPane.showMessageDialog(null, resultado + "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        try {
+            int numero_cuenta = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese el numero de cuenta"));
+            int valor = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese el numero de cuenta"));
+            int resultado = servidorRmi.agregarSaldo(numero_cuenta, valor);
+            JOptionPane.showMessageDialog(null, resultado + "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        try {
+            int numero_cuenta = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese el numero de cuenta"));
+            String resultado = servidorRmi.consultar(numero_cuenta);
+            JOptionPane.showMessageDialog(null, resultado + "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,6 +222,10 @@ public class ClientRmi extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

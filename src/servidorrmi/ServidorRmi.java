@@ -11,12 +11,17 @@ import java.rmi.registry.Registry;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.concurrent.locks.StampedLock;
 import javax.swing.JOptionPane;
 
 public class ServidorRmi extends UnicastRemoteObject implements IOperacionesMath {
 
-    private final int PUERTO = 5000;
+    private final int PUERTO = 5001;
 
     public ServidorRmi() throws RemoteException {
 
@@ -75,27 +80,91 @@ public class ServidorRmi extends UnicastRemoteObject implements IOperacionesMath
         return estado;
 
     }
-    
-    public int eliminarCuenta(int numero) throws RemoteException{
-        Connection conectar = null;
+    @Override
+    public int eliminarCuenta(int numero) throws RemoteException {
         int estado;
-        try{
-            
+        try {
+
             //conectar = Conexion.conectar();
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", "root", "");
-            
+
             CallableStatement prcProcedimientoAlmacenado = con.prepareCall("{call Borrar(?)}");
             prcProcedimientoAlmacenado.setInt(1, numero);
             prcProcedimientoAlmacenado.execute();
             estado = 5;
             con.close();
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace();
             estado = 1;
         }
         return estado;
+    }
+    @Override
+    public int agregarSaldo(int numero, int saldo) throws RemoteException{
+        int estado;
+        try {
+
+            //conectar = Conexion.conectar();
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", "root", "");
+
+            CallableStatement prcProcedimientoAlmacenado = con.prepareCall("{call Agregarsaldo(?,?)}");
+            prcProcedimientoAlmacenado.setInt(1, numero);
+            prcProcedimientoAlmacenado.setInt(1,saldo);
+           
+            estado = 5;
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            estado = 1;
+        }
+        return estado;
+        
+    }
+    @Override
+    public int modificarCuenta(int numero,String propietario) throws RemoteException {
+        int estado;
+       
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", "root", "");
+            CallableStatement prcProcedimientoAlmacenado = con.prepareCall("{call Modificar(?,?)}");
+            prcProcedimientoAlmacenado.setInt(1, numero);
+            prcProcedimientoAlmacenado.setString(2, propietario);
+            prcProcedimientoAlmacenado.execute();
+            estado = 5;
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            estado = 1;
+        }
+        return estado;
+    }
+    public String consultar(int numero) throws RemoteException{
+        int estado;
+        int saldo = 0;
+        ResultSet rs = null;
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", "root", "");
+            CallableStatement prcProcedimientoAlmacenado = con.prepareCall("{call Consultar(?)}");
+            prcProcedimientoAlmacenado.setInt(1, numero);
+            rs = prcProcedimientoAlmacenado.executeQuery();
+            saldo = rs.getInt(("saldo"));
+           
+            
+            estado = 5;
+            con.close();
+            
+        }catch(Exception e){
+            estado = 1;
+            e.printStackTrace();
+        }
+        return ("El saldo es: "+ saldo);
     }
 
     @Override
@@ -142,5 +211,9 @@ public class ServidorRmi extends UnicastRemoteObject implements IOperacionesMath
     public double calcularAbsoluto(double numero1) throws RemoteException {
         return Math.abs(numero1);
     }
+
+   
+
+ 
 
 }
