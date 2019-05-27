@@ -11,6 +11,7 @@ public interface IOperacionesMath extends Remote{
     public int eliminarCuenta (int numero_cuenta) throws RemoteException;
     public int modificarCuenta(int numero_cuenta, String propietario) throws RemoteException;
     public int agregarSaldo(int numero_cuenta, int valor) throws RemoteException;
+    public int retirarSaldo(int numero_cuenta, int valor) throws RemoteException;
     public String consultar(int numero_cuenta) throws RemoteException;
     
     public double calcularRaiz(double numero)

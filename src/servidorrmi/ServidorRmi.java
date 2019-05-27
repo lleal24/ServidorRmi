@@ -102,7 +102,7 @@ public class ServidorRmi extends UnicastRemoteObject implements IOperacionesMath
         return estado;
     }
     @Override
-    public int agregarSaldo(int numero, int saldo) throws RemoteException{
+    public int agregarSaldo(int numero, int valor) throws RemoteException{
         int estado;
         try {
 
@@ -112,8 +112,11 @@ public class ServidorRmi extends UnicastRemoteObject implements IOperacionesMath
 
             CallableStatement prcProcedimientoAlmacenado = con.prepareCall("{call Agregarsaldo(?,?)}");
             prcProcedimientoAlmacenado.setInt(1, numero);
-            prcProcedimientoAlmacenado.setInt(1,saldo);
-           
+            prcProcedimientoAlmacenado.setInt(2,valor);
+            prcProcedimientoAlmacenado.executeQuery();
+            //String sentencia = "UPDATE cuenta SET saldo=saldo'"+"''"+valor+"' WHERE numero_cuenta='"+numero+"';";
+            //Statement st =(Statement)con.createStatement();
+            //ResultSet rs = st.executeQuery(sentencia);
             estado = 5;
             con.close();
 
@@ -123,6 +126,26 @@ public class ServidorRmi extends UnicastRemoteObject implements IOperacionesMath
         }
         return estado;
         
+    }
+    public int retirarSaldo(int numero, int valor) throws RemoteException{
+        int estado;
+        try {
+
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", "root", "");
+
+            CallableStatement prcProcedimientoAlmacenado = con.prepareCall("{call Retirarsaldo(?,?)}");
+            prcProcedimientoAlmacenado.setInt(1, numero);
+            prcProcedimientoAlmacenado.setInt(2,valor);
+            prcProcedimientoAlmacenado.executeQuery();
+            estado = 5;
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            estado = 1;
+        }
+        return estado; 
     }
     @Override
     public int modificarCuenta(int numero,String propietario) throws RemoteException {
@@ -146,7 +169,7 @@ public class ServidorRmi extends UnicastRemoteObject implements IOperacionesMath
     }
     public String consultar(int numero) throws RemoteException{
         int estado;
-        int saldo = 0;
+        int nsaldo = 0;
         ResultSet rs = null;
         try{
             Class.forName("com.mysql.jdbc.Driver");
@@ -154,9 +177,7 @@ public class ServidorRmi extends UnicastRemoteObject implements IOperacionesMath
             CallableStatement prcProcedimientoAlmacenado = con.prepareCall("{call Consultar(?)}");
             prcProcedimientoAlmacenado.setInt(1, numero);
             rs = prcProcedimientoAlmacenado.executeQuery();
-            saldo = rs.getInt(("saldo"));
-           
-            
+            nsaldo = prcProcedimientoAlmacenado.getInt(3);
             estado = 5;
             con.close();
             
@@ -164,56 +185,52 @@ public class ServidorRmi extends UnicastRemoteObject implements IOperacionesMath
             estado = 1;
             e.printStackTrace();
         }
-        return ("El saldo es: "+ saldo);
+        return ("El saldo es: "+ nsaldo);
     }
 
     @Override
     public double calcularPotencia(double numero1, double numero2) throws RemoteException {
-        return Math.pow(numero1, numero2);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public double calcularMinimo(double numero1, double numero2) throws RemoteException {
-        return Math.min(numero2, numero1);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public double calcualrMaximo(double numero1, double numero2) throws RemoteException {
-        return Math.max(numero2, numero1);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public double calcularSeno(double numero1) throws RemoteException {
-        return Math.sin(numero1);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public double calcularCoseno(double numero1) throws RemoteException {
-        return Math.cos(numero1);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public double calcularLogaritmo(double numero1) throws RemoteException {
-        return Math.log(numero1);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public double calcularTangente(double numero1) throws RemoteException {
-        return Math.tan(numero1);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public double calcularAleatorio() throws RemoteException {
-        return Math.random();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public double calcularAbsoluto(double numero1) throws RemoteException {
-        return Math.abs(numero1);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-   
-
- 
 
 }

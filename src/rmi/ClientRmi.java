@@ -91,6 +91,11 @@ public class ClientRmi extends javax.swing.JFrame {
         jPanel1.add(jButton4);
 
         jButton5.setText("Retirar saldo");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton5);
 
         jButton6.setText("Consultar saldo");
@@ -164,7 +169,7 @@ public class ClientRmi extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             int numero_cuenta = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese el numero de cuenta"));
-            int valor = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese el numero de cuenta"));
+            int valor = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese cantidad de dinero"));
             int resultado = servidorRmi.agregarSaldo(numero_cuenta, valor);
             JOptionPane.showMessageDialog(null, resultado + "");
         } catch (Exception e) {
@@ -183,6 +188,18 @@ public class ClientRmi extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+         try {
+            int numero_cuenta = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese el numero de cuenta"));
+            int valor = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Ingrese cantidad de dinero"));
+            int resultado = servidorRmi.retirarSaldo(numero_cuenta, valor);
+            JOptionPane.showMessageDialog(null, resultado + "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
